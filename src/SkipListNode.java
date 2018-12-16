@@ -7,11 +7,10 @@ public class SkipListNode {
 	private SkipListNode next = null;
 	private SkipListNode prev = null;
 	private int printPosition = 0;
-	//default node value is set to -1
-	private int data = -1;
+	private Integer data;
 	
 	//Constructor
-	SkipListNode(int data){
+	SkipListNode(Integer data){
 		setData(data);
 	}
 
@@ -56,16 +55,16 @@ public class SkipListNode {
 		this.printPosition = printPosition;
 	}
 
-	public int getData() {
+	public Integer getData() {
 		return data;
 	}
 
-	public void setData(int data) {
+	public void setData(Integer data) {
 		this.data = data;
 	}
 	
 	//Modifying toString method, we print null if the object is empty i.e. data is -1
 	public String toString() {
-		return (data == -1 ? "null" : Integer.toString(data));
+		return (data==null ? "null" : Integer.toString(data));
 	}
 }

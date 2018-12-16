@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class SkipList {
@@ -14,8 +20,8 @@ public class SkipList {
 		this.maxLevel = maxLevel;
 		rand = new Random();
 
-		SkipListNode head = new SkipListNode(-1);
-		SkipListNode tail = new SkipListNode(-1);
+		SkipListNode head = new SkipListNode(null);
+		SkipListNode tail = new SkipListNode(null);
 
 		head.setNext(tail);
 		tail.setPrev(head);
@@ -24,7 +30,7 @@ public class SkipList {
 		this.tail = tail;
 	}
 
-	private SkipListNode find(int data) {
+	private SkipListNode find(Integer data) {
 		SkipListNode curPos = head;
 		while (true) {
 			while (!(curPos.getNext().toString().equals("null")) && curPos.getNext().getData() <= data)
@@ -36,14 +42,14 @@ public class SkipList {
 		return curPos;
 	}
 
-	public boolean insertNode(int data) {
+	public boolean insertNode(Integer data) {
 		if (data < 0) {
 			System.out.println("Data cannot be negative");
 			return false;
 		}
 			
 		SkipListNode currentPosition = find(data);
-		if (!currentPosition.toString().equals("null") && currentPosition.getData() == data) {
+		if (!currentPosition.toString().equals("null") && currentPosition.getData().equals(data)) {
 			System.out.println("Duplicate value will not be inserted");
 			return false;
 		}
@@ -96,8 +102,8 @@ public class SkipList {
 	}
 	
 	private void buildEmptyLevel() {
-		SkipListNode tempHead = new SkipListNode(-1);
-		SkipListNode tempTail = new SkipListNode(-1);
+		SkipListNode tempHead = new SkipListNode(null);
+		SkipListNode tempTail = new SkipListNode(null);
 		tempHead.setNext(tempTail);
 		tempTail.setPrev(tempHead);
 		tempHead.setDown(head);
@@ -119,14 +125,14 @@ public class SkipList {
 		return row;
 	}
 
-	public boolean contains(int data) {
-		if(data == find(data).getData()) {
+	public boolean contains(Integer data) {
+		if(data.equals(find(data).getData())) {
 			return true;
 		}
 		else return false;
 	}
 	
-	public boolean deleteNode(int data) {
+	public boolean deleteNode(Integer data) {
 		if (!contains(data)) {
 			System.out.println("Skiplist does not contain this data.");
 			return false;
@@ -215,15 +221,68 @@ public class SkipList {
 		
 	}
 
-	public void findNode(int data) {
+	public void findNode(Integer data) {
 		SkipListNode node = find(data);
-		if(data == node.getData()) {
+		if(data.equals(node.getData())) {
 			System.out.println("Key found in the skiplist");
 			System.out.println("Previous Key = "+node.getPrev().getData());
 			System.out.println("Next Key = "+node.getNext().getData());
 		}
 		else {
 			System.out.println("Key not present");
+		}
+		
+	}
+
+	public void readFromFile(String filePath) {
+		String str = "";
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(filePath));
+			str = in.readLine();
+		} catch (FileNotFoundException e) {
+			System.out.println("Filepath invalid");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String[] tokens = str.split(",");
+		for(int i=0;i<tokens.length;i++) {
+			insertNode(Integer.parseInt(tokens[i]));
+		}
+		
+	}
+
+	public void deleteFromFile(String filePath) {
+		String str = "";
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(filePath));
+			str = in.readLine();
+		} catch (FileNotFoundException e) {
+			System.out.println("Filepath invalid");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String[] tokens = str.split(",");
+		for(int i=0;i<tokens.length;i++) {
+			deleteNode(Integer.parseInt(tokens[i]));
+		}
+		
+	}
+
+	public void printStats() {
+		SkipListNode currentPosition = head;
+		Map<Integer,Integer> statMap = new HashMap<Integer,Integer>();
+		for(int i=0;i<=height;i++) {
+			statMap.put(i, 0);
+		}
+		while(currentPosition!=null) {
+			SkipListNode tempNode = currentPosition;
+			int i=0;
+			while(tempNode!=null) {
+				statMap.put(i, statMap.get(i)+1);
+				tempNode = tempNode.getUp();
+			}
 		}
 		
 	}

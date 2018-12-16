@@ -17,7 +17,6 @@ public class Main {
             System.out.println("4. FindNode");
             System.out.println("5. SetTrace");
             System.out.println("6. DeleteList");
-            //following methods are left
             System.out.println("7. InsertNodesFromFile");
             System.out.println("8. DeleteNodesFromFile");
             System.out.println("9. PrintStats");
@@ -59,6 +58,22 @@ public class Main {
                 	if(scan.nextInt()==1) {
                 		sl = null;
                 	}
+                	break;
+                case 7 :
+                	System.out.println("Enter filepath to insert integers from");
+                	scan.nextLine();
+                	String filePath = scan.nextLine();
+                	sl.readFromFile(filePath);
+                	break;
+                case 8 :
+                	System.out.println("Enter filepath of integers to be deleted");
+                	scan.nextLine();
+                	String filePath2 = scan.nextLine();
+                	sl.deleteFromFile(filePath2);
+                	break;
+                case 9 :
+                	System.out.println("Enter filepath of integers to be deleted");
+                	sl.printStats();
                 	break;
                 default :
                     System.out.println("Wrong Entry \n ");
